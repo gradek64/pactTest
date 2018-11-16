@@ -2,13 +2,15 @@ const express = require('express')
 const cors = require('cors')
 const moment = require('moment')
 const bodyParser = require('body-parser')
-const server = express()
+const app = express()
 const port = 9123 || process.env.API_PORT
+var http = require('http');
 
-server.use(cors())
-server.use(bodyParser.json())
-server.use(bodyParser.urlencoded({ extended: true }))
-server.use((req, res, next) => {
+
+app.use(cors())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use((req, res, next) => {
   res.header('Content-Type', 'application/json; charset=utf-8')
   next()
 })
@@ -17,10 +19,10 @@ const dataStore = {
   count: 1000
 }
 
-server.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.json({ status: 'running' });
 });
-server.get('/provider', (req, res) => {
+app.get('/provider', (req, res) => {
   const validDate = req.query.validDate
   const dateRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}/
 
@@ -43,6 +45,9 @@ server.get('/provider', (req, res) => {
     }
   }
 })
+app.set('port', port);
+var server = http.createServer(app);
+
 
 server.listen(port, () => {
   console.log(`Provider Service listening on http://localhost:${port}`)
