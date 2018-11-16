@@ -1,51 +1,49 @@
-var createError = require('http-errors');
-var express = require('express');
+const express = require('express')
 const cors = require('cors')
+const moment = require('moment')
 const bodyParser = require('body-parser')
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const server = express()
+const port = 9123 || process.env.API_PORT
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(cors())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use((req, res, next) => {
+server.use(cors())
+server.use(bodyParser.json())
+server.use(bodyParser.urlencoded({ extended: true }))
+server.use((req, res, next) => {
   res.header('Content-Type', 'application/json; charset=utf-8')
   next()
 })
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+const dataStore = {
+  count: 1000
+}
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+server.get('/', (req, res) => {
+  res.json({ status: 'running' });
 });
+server.get('/provider', (req, res) => {
+  const validDate = req.query.validDate
+  const dateRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}/
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  if (!validDate) {
+    res.status(400)
+    res.json({ error: 'validDate is required' });
+  } else if (!moment(validDate, moment.ISO_8601).isValid()) {
+    res.status(400)
+    res.json({ error: `'${validDate}' is not a date` })
+  } else {
+    if (dataStore.count > 0) {
+      res.json({
+        'test': 'NO',
+        'validDate': moment(new Date(), moment.ISO_8601).format('YYYY-MM-DDTHH:mm:ssZ'),
+        'count': dataStore.count
+      })
+    } else {
+      res.status(404)
+      res.send()
+    }
+  }
+})
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
+server.listen(port, () => {
+  console.log(`Provider Service listening on http://localhost:${port}`)
+})
