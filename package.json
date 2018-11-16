@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app",
-    "startAPI": "node app"
-  },
+    "start": "node server"
+ },
   "dependencies": {
     "body-parser": "^1.16.1",
     "cookie-parser": "~1.4.3",
