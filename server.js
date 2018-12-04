@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // set the home page route
-app.get('/html', function(req, res) {
+app.get('/', function(req, res) {
   // U should specify header but if not browser will adjust
   res.header('Content-Type', 'text/html; charset=utf-8')
 	// ejs render automatically looks in the views folder
