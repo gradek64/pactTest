@@ -44,6 +44,17 @@ app.get('/login', (req, res) => {
   }
 });
 
+app.get('/cards', (req, res) => {
+  res.header('Content-Type', 'text/html');
+  res.write('responds with cards set!');
+  res.end();
+});
+
+app.get('/fruits', (req, res) => {
+  res.header('Content-Type', 'text/html');
+  res.write('today you should have bannana!')
+});
+
 app.get('/json', (req, res) => {
     //specifif header only for this route
     res.header('Content-Type', 'application/json; charset=utf-8')
