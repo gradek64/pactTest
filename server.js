@@ -53,6 +53,7 @@ app.get('/cards', (req, res) => {
 app.get('/fruits', (req, res) => {
   res.header('Content-Type', 'text/html');
   res.write('today you should have bannana!')
+  res.end();
 });
 
 app.get('/json', (req, res) => {
