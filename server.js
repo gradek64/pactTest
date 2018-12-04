@@ -14,17 +14,14 @@ app.use(express.static(__dirname + '/public'));
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use((req, res, next) => {
-  //set general heaader for all routes;
-  res.header('Content-Type', 'text/html; charset=utf-8')
-  next()
-})
-
 
 // set the home page route
 app.get('/', function(req, res) {
+  // U should specify header but if not browser will adjust
+  // res.header('Content-Type', 'text/html; charset=utf-8')
 	// ejs render automatically looks in the views folder
 	res.render('index');
+  //res.end('hi');
 });
 
 app.get('/json', (req, res) => {
