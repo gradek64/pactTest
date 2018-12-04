@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use((req, res, next) => {
   //set general heaader for all routes;
-  res.header('Content-Type', 'application/text; charset=utf-8')
+  res.header('Content-Type', 'text/html; charset=utf-8')
   next()
 })
 
@@ -29,7 +29,7 @@ app.get('/', function(req, res) {
 
 app.get('/json', (req, res) => {
     //specifif header only for this route
-    res.header('Content-Type', 'application/text; charset=utf-8')
+    res.header('Content-Type', 'application/json; charset=utf-8')
     res.json({json:'it is json response object'})
 })
 
