@@ -1,53 +1,34 @@
 const express = require('express')
 const cors = require('cors')
-const moment = require('moment')
 const bodyParser = require('body-parser')
 const app = express()
 const port = 9123 || process.env.API_PORT
-var http = require('http');
+//node native http module;
+const http = require('http');
 
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use((req, res, next) => {
-  res.header('Content-Type', 'application/json; charset=utf-8')
+  //U can set general header here;
+  res.header('Content-Type', 'application/text; charset=utf-8')
   next()
 })
 
-const dataStore = {
-  count: 1000
-}
-
 app.get('/', (req, res) => {
+  res.write('index page loaded!')
+});
+
+app.get('/json', (req, res) => {
+  //header for this route
+    res.header('Content-Type', 'application/text; charset=utf-8')
+  //response
   res.json({ status: 'running' });
 });
-app.get('/provider', (req, res) => {
-  const validDate = req.query.validDate
-  const dateRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2}/
 
-  if (!validDate) {
-    res.status(400)
-    res.json({ error: 'validDate is required' });
-  } else if (!moment(validDate, moment.ISO_8601).isValid()) {
-    res.status(400)
-    res.json({ error: `'${validDate}' is not a date` })
-  } else {
-    if (dataStore.count > 0) {
-      res.json({
-        'test': 'NO',
-        'validDate': moment(new Date(), moment.ISO_8601).format('YYYY-MM-DDTHH:mm:ssZ'),
-        'count': dataStore.count
-      })
-    } else {
-      res.status(404)
-      res.send()
-    }
-  }
-})
 app.set('port', port);
 var server = http.createServer(app);
-
 
 server.listen(port, () => {
   console.log(`Provider Service listening on http://localhost:${port}`)
