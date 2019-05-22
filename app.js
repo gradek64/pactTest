@@ -31,5 +31,5 @@ app.set('port', port);
 var server = http.createServer(app);
 
 server.listen(port, () => {
-  console.log(`Provider Service listening on http://localhost:${port}`)
+  console.log(`Provider Service listening and working  on http://localhost:${port}`)
 })
